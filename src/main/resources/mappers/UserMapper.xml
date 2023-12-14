@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.couple.couplediaryapp.user.UserMapper">
-    <insert id="signUp" useGeneratedKeys="true" keyProperty="userId">
+    <insert id="signUp">
         INSERT INTO couple_user SET
         uid = #{uid},
         upw = #{upw},
@@ -11,4 +11,12 @@
         birth = #{birth},
         started_at = #{startedAt}
     </insert>
+
+    <select id="getUser">
+        SELECT a.cuser userId, b.ccouple coupleId, uid, upw, nm, pic, birth, started_at startedAt, gender
+        FROM couple_user a
+        INNER JOIN couple b
+        ON a.cuser = b.cwoman OR a.cuser = b.cman
+        WHERE a.uid = #{uid}
+    </select>
 </mapper>
