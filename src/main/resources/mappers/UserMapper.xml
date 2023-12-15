@@ -19,4 +19,30 @@
         ON a.cuser = b.cwoman OR a.cuser = b.cman
         WHERE a.uid = #{uid}
     </select>
+
+    <!-- -->
+    <select id="getProfile">
+        SELECT A.nm AS myNm, A.pic AS myPic, C.pic as 'partnerPic',
+               A.birth AS birthDay, A.started_at AS startedAt
+        FROM couple_user AS A
+        JOIN couple AS B
+        ON A.gender = 'M' AND B.cman = A.cuser
+        OR A.gender != 'M' AND B.cwoman = A.cuser
+        JOIN couple_user AS C
+        ON A.gender = 'M' AND B.cwoman = C.cuser
+        OR A.gender != 'M' AND B.cman = C.cuser
+        WHERE B.ccouple = #{coupleId}
+        AND A.cuser = #{userId}
+    </select>
+    <select id="getPartnerProfile">
+        SELECT A.nm AS partnerNm, A.pic AS partnerPic,
+               A.birth AS partnerBirth, A.started_at AS coupleDate
+        FROM couple_user A
+        JOIN couple B
+        ON A.gender = 'M' AND B.cman = A.cuser
+        OR A.gender != 'M' AND B.cwoman = A.cuser
+        WHERE B.ccouple = #{coupleId}
+        AND A.cuser != #{userId}
+    </select>
+    <!-- -->
 </mapper>
