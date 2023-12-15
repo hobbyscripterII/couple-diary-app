@@ -7,7 +7,8 @@ import java.util.*;
 
 @Mapper
 public interface DiaryMapper {
-    // 일기 목록 조회
+    //
+    // 일기 목록 조회 작업 완료입니다.
     List<DiarySelVo> getDiary(int coupleId);
     List<String> getDiaryPics(int diaryId);
     List<String> getDiaryHash(int diaryId);
