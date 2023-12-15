@@ -10,7 +10,7 @@ import java.util.*;
 public interface DiaryMapper {
 
 
-    //일기 등록
+    //일기 등록입니다
     int insDairy(DiaryInsDto dto);// 일기 내용 등록
     int insDiaryPics(DiaryInsDto dto);// 일기 사진 등록
     int insDiaryHash(DiaryInsDto dto);// 일기 해시태그 등록
