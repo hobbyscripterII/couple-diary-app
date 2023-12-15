@@ -7,13 +7,13 @@ import lombok.Data;
 public class UserSelProfileVo {
     //
     @Schema(title = "나의 프로필 이름")
-    private String myNm;
+    private String nm;
     @Schema(title = "나의 프로필 사진")
-    private String myPic;
+    private String pic;
     @Schema(title = "나의 연인의 프로필 사진")
     private String partnerPic;
     @Schema(title = "나의 생일")
-    private String birthDay;
+    private String birth;
     @Schema(title = "연애를 시작한 날")
     private String startedAt;
 }

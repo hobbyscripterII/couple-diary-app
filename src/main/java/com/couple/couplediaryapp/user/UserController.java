@@ -35,7 +35,7 @@ public class UserController {
     }
     //
     @PostMapping
-    @Operation(summary = "로그인", description = "로그인 기능")
+    @Operation(summary = "로그인", description = "로그인 처리 기능")
     public UserEntity signIn(@RequestBody UserSignInDto dto, HttpServletRequest request) {
         UserEntity userEntity = service.signIn(dto);
 
@@ -48,7 +48,7 @@ public class UserController {
     }
     //
     @GetMapping("/profile")
-    @Operation(summary = "프로필 정보", description = "프로필 출력 정보")
+    @Operation(summary = "프로필 출력", description = "프로필 출력 기능")
     public UserSelProfileVo getProfile(HttpServletRequest request){
         //
         int userId = getUserId(request);
@@ -63,7 +63,7 @@ public class UserController {
     }
     //
     @GetMapping("/partner_profile")
-    @Operation(summary = "상대 연인의 프로필 정보", description = "상대 연인의 프로필 출력 정보")
+    @Operation(summary = "파트너 프로필 출력", description = "파트너 프로필 출력 기능")
     public UserSelPartnerVo getPartnerProfile(HttpServletRequest request){
         //
         int userId = getUserId(request);
