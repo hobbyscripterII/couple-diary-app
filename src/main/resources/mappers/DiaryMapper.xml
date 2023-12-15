@@ -3,8 +3,8 @@
 <mapper namespace="com.couple.couplediaryapp.diary.DiaryMapper">
     <!-- 일기 목록 조회 -->
     <select id="getDiary">
-        SELECT B.cdiary, A.pic AS writerPic, B.title AS diaryTitle,
-        B.`contents` AS diaryContents, B.emoji AS diaryEmoji,
+        SELECT B.cdiary AS diaryId, A.pic AS pic, B.title AS title,
+        B.`contents`, B.emoji,
         B.created_at AS createdAt
         FROM couple_user AS A
         JOIN couple_diary AS B
@@ -23,4 +23,51 @@
         WHERE cdiary = #{diaryId}
     </select>
     <!-- -->
+
+
+    <!-- 일기 읽기 -->
+    <select id="selPicDiary">
+        SELECT cpic as pic
+        FROM couple_pics
+        WHERE cdiary = #{diaryId}
+    </select>
+    <select id="selHashDiary">
+        SELECT hash_contents as hashContents
+        FROM couple_hash
+        WHERE cdiary = #{diaryId}
+    </select>
+    <select id="selDiary">
+        SELECT A.title, A.contents, A.emoji, A.created_at AS createdAt, B.pic
+        FROM couple_diary A
+        JOIN couple_user B
+        ON A.cuser = B.cuser
+        WHERE A.cdiary = #{diaryId}
+    </select>
+
+
+    <!-- 일기 등록 (내용, 사진, 해시태그 insert) -->
+    <insert id="insDairy" keyProperty="diaryId" useGeneratedKeys="true">
+        INSERT INTO couple_diary
+        SET ccouple = #{ccouple}
+        , cuser = #{cuser}
+        , title = #{title}
+        , contents = #{contents}
+        , emoji = #{emoji}
+    </insert>
+    <insert id="insDiaryPics">
+        INSERT INTO couple_pics
+        (cdiary, cpic)
+        VALUES
+        <foreach collection="pics" item="cpic" separator=",">
+            ( #{diaryId}, #{cpic} )
+        </foreach>
+    </insert>
+    <insert id="insDiaryHash">
+        INSERT INTO couple_hash
+        (cdiary, hash_contents)
+        VALUES
+        <foreach collection="hashContents" item="hash_contents" separator=",">
+            ( #{diaryId}, #{hash_contents} )
+        </foreach>
+    </insert>
 </mapper>
