@@ -1,9 +1,7 @@
 package com.couple.couplediaryapp.user;
 
 import com.couple.couplediaryapp.common.Const;
-import com.couple.couplediaryapp.user.model.UserSignInDto;
-import com.couple.couplediaryapp.user.model.UserEntity;
-import com.couple.couplediaryapp.user.model.UserSignUpDto;
+import com.couple.couplediaryapp.user.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
@@ -43,5 +41,15 @@ public class UserService {
             e.printStackTrace();
         }
         return userEntity;
+    }
+    //
+    public UserSelProfileVo getProfile(UserSelProfileDto dto){
+        //
+        return mapper.getProfile(dto);
+    }
+    //
+    public UserSelPartnerVo getPartnerProfile(UserSelProfileDto dto){
+        //
+        return mapper.getPartnerProfile(dto);
     }
 }

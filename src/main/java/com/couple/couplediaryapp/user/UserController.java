@@ -3,18 +3,13 @@ package com.couple.couplediaryapp.user;
 import com.couple.couplediaryapp.common.Const;
 import com.couple.couplediaryapp.common.ResVo;
 import com.couple.couplediaryapp.common.SessionConst;
-import com.couple.couplediaryapp.user.model.UserSignInDto;
-import com.couple.couplediaryapp.user.model.UserEntity;
-import com.couple.couplediaryapp.user.model.UserSignUpDto;
+import com.couple.couplediaryapp.user.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -28,7 +23,17 @@ public class UserController {
 //    public ResVo signUp(@RequestBody UserSignUpDto dto) {
 //        return new ResVo(service.signUp(dto));
 //    }
+    //
+    public Integer getUserId(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return Integer.valueOf(String.valueOf(session.getAttribute(SessionConst.USER_ID)));
+    }
 
+    public Integer getCoupleId(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return Integer.valueOf(String.valueOf(session.getAttribute(SessionConst.COUPLE_ID)));
+    }
+    //
     @PostMapping
     @Operation(summary = "로그인", description = "로그인 기능")
     public UserEntity signIn(@RequestBody UserSignInDto dto, HttpServletRequest request) {
@@ -41,15 +46,34 @@ public class UserController {
         }
         return userEntity;
     }
-
-    public Integer getUserId(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        return Integer.valueOf(String.valueOf(session.getAttribute(SessionConst.USER_ID)));
+    //
+    @GetMapping("/profile")
+    @Operation(summary = "프로필 정보", description = "프로필 출력 정보")
+    public UserSelProfileVo getProfile(HttpServletRequest request){
+        //
+        int userId = getUserId(request);
+        int coupleId = getCoupleId(request);
+        UserSelProfileDto dto = UserSelProfileDto.builder()
+                .userId(userId)
+                .coupleId(coupleId)
+                .build();
+        log.info("dto = {}",dto);
+        //
+        return service.getProfile(dto);
     }
-
-    public Integer getCoupleId(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        return Integer.valueOf(String.valueOf(session.getAttribute(SessionConst.COUPLE_ID)));
+    //
+    @GetMapping("/partner_profile")
+    @Operation(summary = "상대 연인의 프로필 정보", description = "상대 연인의 프로필 출력 정보")
+    public UserSelPartnerVo getPartnerProfile(HttpServletRequest request){
+        //
+        int userId = getUserId(request);
+        int coupleId = getCoupleId(request);
+        UserSelProfileDto dto = UserSelProfileDto.builder()
+                .userId(userId)
+                .coupleId(coupleId)
+                .build();
+        log.info("dto = {}",dto);
+        //
+        return service.getPartnerProfile(dto);
     }
-
 }
