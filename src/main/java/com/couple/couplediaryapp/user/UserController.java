@@ -1,5 +1,6 @@
 package com.couple.couplediaryapp.user;
 
+import com.couple.couplediaryapp.common.Const;
 import com.couple.couplediaryapp.common.ResVo;
 import com.couple.couplediaryapp.common.SessionConst;
 import com.couple.couplediaryapp.user.model.UserSignInDto;
@@ -37,12 +38,18 @@ public class UserController {
             HttpSession session = request.getSession();
             session.setAttribute(SessionConst.USER_ID, userEntity.getUserId());
             session.setAttribute(SessionConst.COUPLE_ID, userEntity.getCoupleId());
-            session.setAttribute(SessionConst.USER_GENDER, userEntity.getGender());
-
-            log.info("USER_ID = {}", session.getAttribute(SessionConst.USER_ID));
-            log.info("COUPLE_ID = {}", session.getAttribute(SessionConst.COUPLE_ID));
-            log.info("USER_GENDER = {}", session.getAttribute(SessionConst.USER_GENDER));
         }
         return userEntity;
     }
+
+    public Integer getUserId(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return Integer.valueOf(String.valueOf(session.getAttribute(SessionConst.USER_ID)));
+    }
+
+    public Integer getCoupleId(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return Integer.valueOf(String.valueOf(session.getAttribute(SessionConst.COUPLE_ID)));
+    }
+
 }
