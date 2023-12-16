@@ -12,11 +12,13 @@
         WHERE B.ccouple = #{coupleId}
         ORDER BY B.cdiary DESC
     </select>
+
     <select id="getDiaryPics">
         SELECT cpic
         FROM couple_pics
         WHERE cdiary = #{diaryId}
     </select>
+
     <select id="getDiaryHash">
         SELECT hash_contents
         FROM couple_hash
@@ -24,18 +26,19 @@
     </select>
     <!-- -->
 
-
     <!-- 일기 읽기 -->
     <select id="selPicDiary">
         SELECT cpic as pic
         FROM couple_pics
         WHERE cdiary = #{diaryId}
     </select>
+
     <select id="selHashDiary">
         SELECT hash_contents as hashContents
         FROM couple_hash
         WHERE cdiary = #{diaryId}
     </select>
+
     <select id="selDiary">
         SELECT A.title, A.contents, A.emoji, A.created_at AS createdAt, B.pic
         FROM couple_diary A
@@ -43,7 +46,7 @@
         ON A.cuser = B.cuser
         WHERE A.cdiary = #{diaryId}
     </select>
-
+    <!-- -->
 
     <!-- 일기 등록 (내용, 사진, 해시태그 insert) -->
     <insert id="insDairy" keyProperty="diaryId" useGeneratedKeys="true">
@@ -54,6 +57,7 @@
         , contents = #{contents}
         , emoji = #{emoji}
     </insert>
+
     <insert id="insDiaryPics">
         INSERT INTO couple_pics
         (cdiary, cpic)
@@ -62,6 +66,7 @@
             ( #{diaryId}, #{cpic} )
         </foreach>
     </insert>
+
     <insert id="insDiaryHash">
         INSERT INTO couple_hash
         (cdiary, hash_contents)
@@ -69,5 +74,73 @@
         <foreach collection="hashContents" item="hash_contents" separator=",">
             ( #{diaryId}, #{hash_contents} )
         </foreach>
+    </insert>
+    <!-- -->
+
+    <!-- 주영 -->
+    <!-- 일기 수정 -->
+    <update id="updDiary">
+        UPDATE couple_diary SET
+        title = #{title},
+        contents = #{contents},
+        emoji = #{emoji}
+        WHERE cdiary = #{diaryId}
+    </update>
+
+    <!-- 일기 사진 수정 -->
+    <update id="updDiaryPics">
+        UPDATE couple_pics SET
+        cpic = #{pic}
+        WHERE cpics = #{picsId}
+    </update>
+
+    <!-- 일기 해시태그 수정 -->
+    <update id="updDiaryHash">
+        UPDATE couple_hash SET
+        hash_contents = #{hash}
+        WHERE chash = #{hashId}
+    </update>
+
+    <!-- picsId 가져오기 -->
+    <select id="getPicsId">
+        SELECT cpics FROM couple_pics WHERE cdiary = #{diaryId}
+    </select>
+
+    <!-- hashId 가져오기 -->
+    <select id="getHashId">
+        SELECT chash FROM couple_hash WHERE cdiary = #{diaryId}
+    </select>
+    <!-- -->
+
+    <!-- 일기 사진 삭제 -->
+    <delete id="delDiaryPics">
+        DELETE FROM couple_pics WHERE cdiary = #{diaryId}
+    </delete>
+
+    <!-- 일기 사진 부분 삭제 -->
+    <delete id="delDiaryPic">
+        DELETE FROM couple_pics WHERE cpics = #{picsId}
+    </delete>
+
+    <!-- 일기 해시태그 삭제 -->
+    <delete id="delDiaryHashs">
+        DELETE FROM couple_hash WHERE cdiary = #{diaryId}
+    </delete>
+
+    <!-- 일기 해시태그 부분 삭제 -->
+    <delete id="delDiaryHash">
+        DELETE FROM couple_hash WHERE chash = #{hashId}
+    </delete>
+
+    <!-- 일기 사진 부분 등록 -->
+    <insert id="insDiaryPic">
+        INSERT INTO couple_pics(cdiary, cpic) VALUES
+        (#{diaryId}, #{pic})
+    </insert>
+
+    <!-- 일기 해시태그 부분 등록 -->
+    <insert id="insDiaryHash">
+        INSERT INTO couple_hash(cdiary, hash_contents) VALUES
+        (#{diaryId}, #{hash})
     </insert>
 </mapper>
