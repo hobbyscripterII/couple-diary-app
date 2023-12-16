@@ -1,13 +1,18 @@
 package com.couple.couplediaryapp.user;
 
+import com.couple.couplediaryapp.diary.model.DiaryUpdDto;
 import com.couple.couplediaryapp.user.model.*;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface UserMapper {
-    int signUp(UserSignUpDto dto);
-    UserEntity getUser(String uid);
-    //
+    // 환
     UserSelProfileVo getProfile(UserSelProfileDto dto); // 유저 프로필 조회
     UserSelPartnerVo getPartnerProfile(UserSelProfileDto dto); // 상대 연인의 프로필 조회
+
+    // 주영
+    int signUp(UserSignUpDto dto); // 회원가입
+    UserEntity getUser(String uid); // 로그인
 }
