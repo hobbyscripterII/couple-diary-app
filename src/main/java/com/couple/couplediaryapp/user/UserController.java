@@ -73,6 +73,7 @@ public class UserController {
     }
 
     @PatchMapping("/profile")
+    @Operation(summary = "프로필 수정", description = "프로필 수정")
     ResVo updProfile(UserUpdProfileDto dto ,HttpServletRequest request) {
         int userId = getUserId(request);
         dto.setUserId(userId);
