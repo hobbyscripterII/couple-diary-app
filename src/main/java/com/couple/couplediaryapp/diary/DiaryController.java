@@ -32,7 +32,7 @@ public class DiaryController {
     // 일기 등록
     @PostMapping
     @Operation(summary = "일기 등록", description = "일기 등록")
-    public ResVo insDiary (@RequestBody DiaryInsDto dto, HttpServletRequest request){
+    public ResVo insDiary(@RequestBody DiaryInsDto dto, HttpServletRequest request) {
         dto.setCuser(getUserId(request));
         dto.setCcouple(getCoupleId(request));
         return service.insDiary(dto);
@@ -41,24 +41,29 @@ public class DiaryController {
     // 일기 읽기
     @GetMapping("/{diaryId}")
     @Operation(summary = "일기 읽기", description = "일기 읽기")
-    DiarySelVo selDiary (@PathVariable int diaryId) {
+    DiarySelVo selDiary(@PathVariable int diaryId) {
         return service.selDiary(diaryId);
     }
 
     // 일기 목록
     @GetMapping
     @Operation(summary = "일기 목록", description = "일기 목록 출력")
-    public List<DiarySelVo> getDiary(HttpServletRequest request){
+    public List<DiarySelVo> getDiary(HttpServletRequest request) {
         return service.getDiary(getCoupleId(request));
     }
 
     // 일기 수정
-    @Operation(summary = "일기 수정", description = "일기 수정 기능")
+    @Operation(summary = "일기 수정", description = "일기 수정")
     @PatchMapping
     int updDiary(@RequestBody DiaryUpdDto dto, HttpServletRequest request) {
         dto.setCoupleId(getCoupleId(request));
         return service.updDiary(dto);
     }
 
-
+    // 일기 삭제
+    @DeleteMapping("/{diaryId}")
+    @Operation(summary = "일기 삭제", description = "일기 삭제")
+    ResVo delDiary(@PathVariable int diaryId) {
+        return service.delDiary(diaryId);
+    }
 }

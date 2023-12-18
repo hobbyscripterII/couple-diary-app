@@ -15,4 +15,8 @@ public interface UserMapper {
     // 주영
     int signUp(UserSignUpDto dto); // 회원가입
     UserEntity getUser(String uid); // 로그인
+
+    // 승민
+    int updProfile(UserUpdProfileDto dto); // 유저 프로필 수정
+
 }

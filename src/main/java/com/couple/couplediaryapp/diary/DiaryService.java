@@ -178,4 +178,17 @@ public class DiaryService {
         List<Integer> getHashId = mapper.getHashId(diaryId);
         return getHashId;
     }
+
+    //승민
+    ResVo delDiary(int diaryId) {
+        try {
+            int delPic = mapper.delDiaryPics(diaryId);
+            int delHash = mapper.delDiaryHashs(diaryId);
+            int delDiary = mapper.delDiary(diaryId);
+            return new ResVo(SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResVo(FAIL);
+        }
+    }
 }

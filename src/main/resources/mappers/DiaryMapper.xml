@@ -111,19 +111,9 @@
     </select>
     <!-- -->
 
-    <!-- 일기 사진 삭제 -->
-    <delete id="delDiaryPics">
-        DELETE FROM couple_pics WHERE cdiary = #{diaryId}
-    </delete>
-
     <!-- 일기 사진 부분 삭제 -->
     <delete id="delDiaryPic">
         DELETE FROM couple_pics WHERE cpics = #{picsId}
-    </delete>
-
-    <!-- 일기 해시태그 삭제 -->
-    <delete id="delDiaryHashs">
-        DELETE FROM couple_hash WHERE cdiary = #{diaryId}
     </delete>
 
     <!-- 일기 해시태그 부분 삭제 -->
@@ -142,4 +132,23 @@
         INSERT INTO couple_hash(cdiary, hash_contents) VALUES
         (#{diaryId}, #{hash})
     </insert>
+
+    <!-- 승민 -->
+    <delete id="delDiaryPics">
+        delete
+        from couple_pics
+        where cdiary = #{diaryId}
+    </delete>
+
+    <delete id="delDiaryHashs">
+        delete
+        from couple_hash
+        where cdiary = #{diaryId}
+    </delete>
+
+    <delete id="delDiary">
+        delete
+        from couple_diary
+        where cdiary = #{diaryId}
+    </delete>
 </mapper>
