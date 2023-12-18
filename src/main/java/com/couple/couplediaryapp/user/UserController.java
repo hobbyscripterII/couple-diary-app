@@ -28,7 +28,6 @@ public class UserController {
         HttpSession session = request.getSession();
         return Integer.valueOf(String.valueOf(session.getAttribute(SessionConst.USER_ID)));
     }
-
     public Integer getCoupleId(HttpServletRequest request) {
         HttpSession session = request.getSession();
         return Integer.valueOf(String.valueOf(session.getAttribute(SessionConst.COUPLE_ID)));
@@ -51,11 +50,9 @@ public class UserController {
     @Operation(summary = "프로필 출력", description = "프로필 출력 기능")
     public UserSelProfileVo getProfile(HttpServletRequest request){
         //
-        int userId = getUserId(request);
-        int coupleId = getCoupleId(request);
         UserSelProfileDto dto = UserSelProfileDto.builder()
-                .userId(userId)
-                .coupleId(coupleId)
+                .userId(getUserId(request))
+                .coupleId(getCoupleId(request))
                 .build();
         log.info("dto = {}",dto);
         //
@@ -66,11 +63,9 @@ public class UserController {
     @Operation(summary = "파트너 프로필 출력", description = "파트너 프로필 출력 기능")
     public UserSelPartnerVo getPartnerProfile(HttpServletRequest request){
         //
-        int userId = getUserId(request);
-        int coupleId = getCoupleId(request);
         UserSelProfileDto dto = UserSelProfileDto.builder()
-                .userId(userId)
-                .coupleId(coupleId)
+                .userId(getUserId(request))
+                .coupleId(getCoupleId(request))
                 .build();
         log.info("dto = {}",dto);
         //

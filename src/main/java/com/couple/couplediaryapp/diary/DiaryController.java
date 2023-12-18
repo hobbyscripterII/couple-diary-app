@@ -24,7 +24,7 @@ public class DiaryController {
         return Integer.valueOf(String.valueOf(session.getAttribute(SessionConst.COUPLE_ID)));
     }
 
-    Integer getUserId (HttpServletRequest request) {
+    public Integer getUserId (HttpServletRequest request) {
         HttpSession session = request.getSession();
         return (Integer) session.getAttribute(SessionConst.USER_ID);
     }
