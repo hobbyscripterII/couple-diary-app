@@ -11,7 +11,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
+@ToString
 public class DiaryUpdDto {
     @Schema(title = "일기 아이디")
     private int diaryId;

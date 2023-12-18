@@ -133,13 +133,13 @@
     </delete>
 
     <!-- 일기 사진 부분 등록 -->
-    <insert id="insDiaryPic">
+    <insert id="insDiaryPicPart">
         INSERT INTO couple_pics(cdiary, cpic) VALUES
         (#{diaryId}, #{pic})
     </insert>
 
     <!-- 일기 해시태그 부분 등록 -->
-    <insert id="insDiaryHash">
+    <insert id="insDiaryHashPart">
         INSERT INTO couple_hash(cdiary, hash_contents) VALUES
         (#{diaryId}, #{hash})
     </insert>

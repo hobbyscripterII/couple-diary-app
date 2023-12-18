@@ -30,8 +30,8 @@ public interface DiaryMapper {
     int delDiaryHashs(int diaryId); // 일기 해시태그 전체 삭제
     int delDiaryPic(int picsId); // 일기 사진 부분 삭제
     int delDiaryHash(int diaryId); // 일기 해시태그 부분 삭제
-    int insDiaryPic(DiaryPicsInsDto dto); // 일기 사진 부분 등록
-    int insDiaryHash(DiaryHashInsDto dto); // 일기 해시태그 부분 등록
+    int insDiaryPicPart(DiaryPicsInsDto dto); // 일기 사진 부분 등록
+    int insDiaryHashPart(DiaryHashInsDto dto); // 일기 해시태그 부분 등록
     List<Integer> getPicsId(int diaryId); // picsId 가져오기(couple_pics PK)
     List<Integer> getHashId(int diaryId); // hashId 가져오기(couple_hash PK)
 }

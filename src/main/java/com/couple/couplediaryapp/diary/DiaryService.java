@@ -4,6 +4,7 @@ import com.couple.couplediaryapp.common.Const;
 import com.couple.couplediaryapp.common.ResVo;
 import com.couple.couplediaryapp.diary.model.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 import static com.couple.couplediaryapp.common.Const.FAIL;
 import static com.couple.couplediaryapp.common.Const.SUCCESS;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class DiaryService {
@@ -95,10 +97,10 @@ public class DiaryService {
                 for (int i = 0; i < updItemsCnt; i++) {
                     if (itemName.equals(Const.PICS)) {
                         DiaryPicsInsDto picsDto = new DiaryPicsInsDto(dto.getDiaryId(), dto.getDiaryPics().get(i));
-                        mapper.insDiaryPic(picsDto);
+                        mapper.insDiaryPicPart(picsDto);
                     } else {
                         DiaryHashInsDto hashDto = new DiaryHashInsDto(dto.getDiaryId(), dto.getHashContents().get(i));
-                        mapper.insDiaryHash(hashDto);
+                        mapper.insDiaryHashPart(hashDto);
                     }
                 }
                 // 저장된 아이템 개수가 수정된 아이템 개수보다 많을 때
@@ -124,9 +126,9 @@ public class DiaryService {
                 }
                 for (int i = savedItemsCnt; i < updItemsCnt; i++) {
                     if (itemName.equals(Const.PICS)) {
-                        mapper.insDiaryPic(new DiaryPicsInsDto(dto.getDiaryId(), dto.getDiaryPics().get(i)));
+                        mapper.insDiaryPicPart(new DiaryPicsInsDto(dto.getDiaryId(), dto.getDiaryPics().get(i)));
                     } else {
-                        mapper.insDiaryHash(new DiaryHashInsDto(dto.getDiaryId(), dto.getHashContents().get(i)));
+                        mapper.insDiaryHashPart(new DiaryHashInsDto(dto.getDiaryId(), dto.getHashContents().get(i)));
                     }
                 }
                 result = Const.SUCCESS;
@@ -142,7 +144,7 @@ public class DiaryService {
     public int updDiaryPic(DiaryUpdDto dto, List<Integer> getPicsId) {
         int savedPicsCnt = getPicsId.size();
         int updPicsCnt = dto.getDiaryPics().size();
-        int length = savedPicsCnt - (savedPicsCnt - updPicsCnt);
+        int length = savedPicsCnt > updPicsCnt ? (savedPicsCnt - updPicsCnt) : savedPicsCnt;
         int result = 0;
 
         for (int i = 0; i < length; i++) {
@@ -157,7 +159,7 @@ public class DiaryService {
     public int updDiaryHash(DiaryUpdDto dto, List<Integer> getHashId) {
         int savedHashCnt = getHashId.size();
         int updHashCnt = dto.getDiaryPics().size();
-        int length = savedHashCnt - (savedHashCnt - updHashCnt);
+        int length = savedHashCnt > updHashCnt ? (savedHashCnt - updHashCnt) : savedHashCnt;
         int result = 0;
 
         for (int i = 0; i < length; i++) {
