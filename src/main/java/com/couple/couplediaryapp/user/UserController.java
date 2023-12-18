@@ -71,4 +71,13 @@ public class UserController {
         //
         return service.getPartnerProfile(dto);
     }
+
+    @PatchMapping("/profile")
+    ResVo updProfile(UserUpdProfileDto dto ,HttpServletRequest request) {
+        int userId = getUserId(request);
+        dto.setUserId(userId);
+        return service.updProfile(dto);
+    }
 }
+
+

@@ -1,6 +1,7 @@
 package com.couple.couplediaryapp.user;
 
 import com.couple.couplediaryapp.common.Const;
+import com.couple.couplediaryapp.common.ResVo;
 import com.couple.couplediaryapp.user.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,5 +52,10 @@ public class UserService {
     public UserSelPartnerVo getPartnerProfile(UserSelProfileDto dto){
         //
         return mapper.getPartnerProfile(dto);
+    }
+
+    ResVo updProfile(UserUpdProfileDto dto){
+        int result = mapper.updProfile(dto);
+        return new ResVo(result);
     }
 }

@@ -45,4 +45,14 @@
         AND A.cuser != #{userId}
     </select>
     <!-- -->
+
+    <update id="updProfile">
+        update couple_user
+        set
+        nm = #{nm},
+        pic = #{pic},
+        birth  = #{birth},
+        started_at = #{startedAt}
+        where cuser = #{userId}
+    </update>
 </mapper>
