@@ -85,26 +85,28 @@ public class DiaryService {
         int result = Const.FAIL;
 
         try {
-            if (savedItemsCnt == 0 && updItemsCnt == 0) {
-                // 회원이 등록했던 아이템을 모두 삭제했을 때
-            } else if (savedItemsCnt != 0 && updItemsCnt == 0) {
-                result = itemName.equals(Const.PICS) ? mapper.delDiaryPics(dto.getDiaryId()) : mapper.delDiaryHashs(dto.getDiaryId());
-                // 개수 변경없이 내용만 변경했을 때
-            } else if (savedItemsCnt == updItemsCnt) {
-                result = itemName.equals(Const.PICS) ? updDiaryPic(dto, getItemsId) : updDiaryHash(dto, getItemsId);
-                // 등록한 아이템이 없었으나 사용자가 새로 추가했을 때
-            } else if (savedItemsCnt == 0 && updItemsCnt > 1) {
-                for (int i = 0; i < updItemsCnt; i++) {
-                    if (itemName.equals(Const.PICS)) {
-                        DiaryPicsInsDto picsDto = new DiaryPicsInsDto(dto.getDiaryId(), dto.getDiaryPics().get(i));
-                        mapper.insDiaryPicPart(picsDto);
-                    } else {
-                        DiaryHashInsDto hashDto = new DiaryHashInsDto(dto.getDiaryId(), dto.getHashContents().get(i));
-                        mapper.insDiaryHashPart(hashDto);
-                    }
+            // 회원이 등록했던 아이템을 모두 삭제했을 때
+            if (savedItemsCnt != 0 && updItemsCnt == 0) {
+                return itemName.equals(Const.PICS) ? mapper.delDiaryPics(dto.getDiaryId()) : mapper.delDiaryHashs(dto.getDiaryId());
+            }
+            // 개수 변경없이 내용만 변경했을 때
+            if (savedItemsCnt == updItemsCnt) {
+                return result = itemName.equals(Const.PICS) ? updDiaryPic(dto, getItemsId) : updDiaryHash(dto, getItemsId);
+            }
+            // 등록한 아이템이 없었으나 사용자가 새로 추가했을 때
+            if (savedItemsCnt == 0 && updItemsCnt > 1) {
+                DiaryInsDto insDto = new DiaryInsDto();
+                insDto.setDiaryId(dto.getDiaryId());
+                insDto.setPics(dto.getDiaryPics());
+                insDto.setHashContents(dto.getHashContents());
+                if (itemName.equals(Const.PICS)) {
+                    return mapper.insDiaryPics(insDto);
+                } else {
+                    return mapper.insDiaryHash(insDto);
                 }
-                // 저장된 아이템 개수가 수정된 아이템 개수보다 많을 때
-            } else if (savedItemsCnt > updItemsCnt) {
+            }
+            // 저장된 아이템 개수가 수정된 아이템 개수보다 많을 때
+            if (savedItemsCnt > updItemsCnt) {
                 for (int i = updItemsCnt; i < savedItemsCnt; i++) {
                     if (itemName.equals(Const.PICS)) {
                         mapper.delDiaryPic(getItemsId.get(i));
@@ -117,13 +119,9 @@ public class DiaryService {
                 } else {
                     updDiaryHash(dto, getItemsId);
                 }
-                // 저장된 아이템 개수가 수정된 아이템 개수보다 적을 때
-            } else if (savedItemsCnt < updItemsCnt) {
-                if (itemName.equals(Const.PICS)) {
-                    updDiaryPic(dto, getItemsId);
-                } else {
-                    updDiaryHash(dto, getItemsId);
-                }
+            }
+            // 저장된 아이템 개수가 수정된 아이템 개수보다 적을 때
+            if (savedItemsCnt < updItemsCnt) {
                 for (int i = savedItemsCnt; i < updItemsCnt; i++) {
                     if (itemName.equals(Const.PICS)) {
                         mapper.insDiaryPicPart(new DiaryPicsInsDto(dto.getDiaryId(), dto.getDiaryPics().get(i)));
@@ -131,11 +129,10 @@ public class DiaryService {
                         mapper.insDiaryHashPart(new DiaryHashInsDto(dto.getDiaryId(), dto.getHashContents().get(i)));
                     }
                 }
-                result = Const.SUCCESS;
+                result = SUCCESS;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return result;
         }
         return result;
     }
