@@ -9,8 +9,7 @@ import java.util.*;
 @Data
 public class DiarySelVo {
     //
-    @JsonIgnore
-    @Schema(title = "조회할 일기의 P.K 해시 태그와 사진 조회할 때 사용할 것")
+    @Schema(title = "일기 아이디")
     private int diaryId;
     @Schema(title = "작성자의 프로필 정보")
     private String pic;
