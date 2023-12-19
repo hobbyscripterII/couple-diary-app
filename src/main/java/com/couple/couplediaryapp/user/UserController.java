@@ -37,6 +37,7 @@ public class UserController {
 
     //
     @Operation(summary = "로그인", description = "로그인 처리 기능")
+    @PostMapping
     public UserEntity signIn(@RequestBody UserSignInDto dto, HttpServletRequest request) {
         UserEntity userEntity = service.signIn(dto);
 
