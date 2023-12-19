@@ -9,6 +9,8 @@ import org.apache.catalina.User;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -43,18 +45,14 @@ public class UserService {
         }
         return userEntity;
     }
+
     //
-    public UserSelProfileVo getProfile(UserSelProfileDto dto){
+    public List<UserSelProfileVo> getProfile(int coupleId) {
         //
-        return mapper.getProfile(dto);
-    }
-    //
-    public UserSelPartnerVo getPartnerProfile(UserSelProfileDto dto){
-        //
-        return mapper.getPartnerProfile(dto);
+        return mapper.getProfile(coupleId);
     }
 
-    ResVo updProfile(UserUpdProfileDto dto){
+    ResVo updProfile(UserUpdProfileDto dto) {
         int result = mapper.updProfile(dto);
         return new ResVo(result);
     }

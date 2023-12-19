@@ -15,6 +15,7 @@ import java.util.List;
 public class DiaryUpdDto {
     @Schema(title = "일기 아이디")
     private int diaryId;
+    @JsonIgnore
     @Schema(title = "커플 아이디")
     private int coupleId;
     @Schema(title = "일기 제목")
