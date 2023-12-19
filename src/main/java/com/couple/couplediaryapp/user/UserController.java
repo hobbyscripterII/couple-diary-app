@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/user")
@@ -18,20 +20,22 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService service;
 
-//    @PostMapping
+    //    @PostMapping
 //    @Operation(summary = "회원가입", description = "회원가입 기능")
 //    public ResVo signUp(@RequestBody UserSignUpDto dto) {
 //        return new ResVo(service.signUp(dto));
 //    }
-    //
+
     public Integer getUserId(HttpServletRequest request) {
         HttpSession session = request.getSession();
         return Integer.valueOf(String.valueOf(session.getAttribute(SessionConst.USER_ID)));
     }
+
     public Integer getCoupleId(HttpServletRequest request) {
         HttpSession session = request.getSession();
         return Integer.valueOf(String.valueOf(session.getAttribute(SessionConst.COUPLE_ID)));
     }
+
     //
     @PostMapping
     @Operation(summary = "로그인", description = "로그인 처리 기능")
@@ -45,36 +49,19 @@ public class UserController {
         }
         return userEntity;
     }
+
     //
     @GetMapping("/profile")
     @Operation(summary = "프로필 출력", description = "프로필 출력 기능")
-    public UserSelProfileVo getProfile(HttpServletRequest request){
-        //
-        UserSelProfileDto dto = UserSelProfileDto.builder()
-                .userId(getUserId(request))
-                .coupleId(getCoupleId(request))
-                .build();
-        log.info("dto = {}",dto);
-        //
-        return service.getProfile(dto);
-    }
-    //
-    @GetMapping("/partner_profile")
-    @Operation(summary = "파트너 프로필 출력", description = "파트너 프로필 출력 기능")
-    public UserSelPartnerVo getPartnerProfile(HttpServletRequest request){
-        //
-        UserSelProfileDto dto = UserSelProfileDto.builder()
-                .userId(getUserId(request))
-                .coupleId(getCoupleId(request))
-                .build();
-        log.info("dto = {}",dto);
-        //
-        return service.getPartnerProfile(dto);
+    public UserSelProfileVo getProfile(@RequestParam(name = "partner_id", required = false, defaultValue = "0") int partnerId, HttpServletRequest request) {
+        List<UserSelProfileVo> vo = service.getProfile(getCoupleId(request));
+        log.info("coupleId = {}", getCoupleId(request));
+        return partnerId > 0 ? vo.get(1) : vo.get(0);
     }
 
     @PatchMapping("/profile")
     @Operation(summary = "프로필 수정", description = "프로필 수정")
-    ResVo updProfile(UserUpdProfileDto dto ,HttpServletRequest request) {
+    ResVo updProfile(UserUpdProfileDto dto, HttpServletRequest request) {
         int userId = getUserId(request);
         dto.setUserId(userId);
         return service.updProfile(dto);
