@@ -53,8 +53,13 @@ public class UserController {
     @GetMapping("/profile")
     @Operation(summary = "프로필 출력", description = "프로필 출력 기능")
     public UserSelProfileVo getProfile(@RequestParam(name = "partner_id", required = false, defaultValue = "0") int partnerId, HttpServletRequest request) {
-        List<UserSelProfileVo> vo = service.getProfile(getCoupleId(request));
-        return partnerId > 0 ? vo.get(1) : vo.get(0);
+        List<UserSelProfileVo> vo = service.getProfile(UserSelProfileDto
+                .builder()
+                .coupleId(getCoupleId(request))
+                .userId(getUserId(request))
+                .build());
+
+        return partnerId == 0 ? vo.get(0) : vo.get(1);
     }
 
     @PatchMapping("/profile")
