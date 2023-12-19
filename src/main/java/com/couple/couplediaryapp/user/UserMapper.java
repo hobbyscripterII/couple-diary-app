@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
     // 환
-    List<UserSelProfileVo> getProfile(int coupleId); // 유저 프로필 조회
+    List<UserSelProfileVo> getProfile(UserSelProfileDto dto); // 유저 프로필 조회
 
     // 주영
     int signUp(UserSignUpDto dto); // 회원가입

@@ -47,9 +47,9 @@ public class UserService {
     }
 
     //
-    public List<UserSelProfileVo> getProfile(int coupleId) {
+    public List<UserSelProfileVo> getProfile(UserSelProfileDto dto) {
         //
-        return mapper.getProfile(coupleId);
+        return mapper.getProfile(dto);
     }
 
     ResVo updProfile(UserUpdProfileDto dto) {

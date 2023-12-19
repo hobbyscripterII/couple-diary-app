@@ -22,7 +22,7 @@
 
     <!-- -->
     <select id="getProfile">
-        SELECT A.nm, A.pic, C.pic as partnerPic, A.birth, A.started_at AS startedAt
+        SELECT A.cuser, A.nm, A.pic, C.pic as partnerPic, A.birth, A.started_at AS startedAt
         FROM couple_user AS A
         JOIN couple AS B
         ON A.gender = 'M' AND B.cman = A.cuser
@@ -31,7 +31,7 @@
         ON A.gender = 'M' AND B.cwoman = C.cuser
         OR A.gender = 'W' AND B.cman = C.cuser
         WHERE B.ccouple = #{coupleId}
-        ORDER BY A.cuser ASC
+        ORDER BY A.cuser = #{userId} DESC
     </select>
 
     <update id="updProfile">
