@@ -1,6 +1,5 @@
 package com.couple.couplediaryapp.user;
 
-import com.couple.couplediaryapp.common.Const;
 import com.couple.couplediaryapp.common.ResVo;
 import com.couple.couplediaryapp.common.SessionConst;
 import com.couple.couplediaryapp.user.model.*;
@@ -20,11 +19,11 @@ import java.util.List;
 public class UserController {
     private final UserService service;
 
-    //    @PostMapping
-//    @Operation(summary = "회원가입", description = "회원가입 기능")
-//    public ResVo signUp(@RequestBody UserSignUpDto dto) {
-//        return new ResVo(service.signUp(dto));
-//    }
+    @PostMapping("sign-up")
+    @Operation(summary = "회원가입", description = "회원가입 기능")
+    public ResVo signUp(@RequestBody UserSignUpDto dto) {
+        return new ResVo(service.signUp(dto));
+    }
 
     public Integer getUserId(HttpServletRequest request) {
         HttpSession session = request.getSession();
@@ -37,7 +36,6 @@ public class UserController {
     }
 
     //
-    @PostMapping
     @Operation(summary = "로그인", description = "로그인 처리 기능")
     public UserEntity signIn(@RequestBody UserSignInDto dto, HttpServletRequest request) {
         UserEntity userEntity = service.signIn(dto);
@@ -55,7 +53,6 @@ public class UserController {
     @Operation(summary = "프로필 출력", description = "프로필 출력 기능")
     public UserSelProfileVo getProfile(@RequestParam(name = "partner_id", required = false, defaultValue = "0") int partnerId, HttpServletRequest request) {
         List<UserSelProfileVo> vo = service.getProfile(getCoupleId(request));
-        log.info("coupleId = {}", getCoupleId(request));
         return partnerId > 0 ? vo.get(1) : vo.get(0);
     }
 
