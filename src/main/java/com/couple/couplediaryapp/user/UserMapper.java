@@ -10,8 +10,6 @@ import java.util.List;
 public interface UserMapper {
     // 환
     List<UserSelProfileVo> getProfile(int coupleId); // 유저 프로필 조회
-//    UserSelProfileVo getProfile(UserSelProfileDto dto); // 유저 프로필 조회
-//    UserSelProfileVo getPartnerProfile(UserSelProfileDto dto); // 상대 연인의 프로필 조회
 
     // 주영
     int signUp(UserSignUpDto dto); // 회원가입
