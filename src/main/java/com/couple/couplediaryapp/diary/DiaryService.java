@@ -2,15 +2,18 @@ package com.couple.couplediaryapp.diary;
 
 import com.couple.couplediaryapp.common.Const;
 import com.couple.couplediaryapp.common.ResVo;
+import com.couple.couplediaryapp.common.SessionConst;
 import com.couple.couplediaryapp.diary.model.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static com.couple.couplediaryapp.common.Const.FAIL;
-import static com.couple.couplediaryapp.common.Const.SUCCESS;
+import static com.couple.couplediaryapp.common.Const.*;
 
 @Slf4j
 @Service
@@ -36,14 +39,15 @@ public class DiaryService {
     }
 
     // 일기 목록
-    public List<DiarySelVo> getDiary(int ccouple) {
+    public List<DiarySelVo> getDiary(int coupleId) {
         //
-        List<DiarySelVo> list = mapper.getDiary(ccouple);
+        List<DiarySelVo> list = mapper.getDiary(coupleId);
         for (DiarySelVo vo : list) {
             List<String> pics = mapper.getDiaryPics(vo.getDiaryId());
             List<String> hashs = mapper.getDiaryHash(vo.getDiaryId());
             vo.setPics(pics);
             vo.setHashContents(hashs);
+            //
         }
         return list;
     }

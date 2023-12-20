@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+import static com.couple.couplediaryapp.common.Const.FAIL;
+
 @RestController
 @RequestMapping("/api/diary")
 @RequiredArgsConstructor
@@ -49,6 +51,11 @@ public class DiaryController {
     @GetMapping
     @Operation(summary = "일기 목록", description = "일기 목록 출력")
     public List<DiarySelVo> getDiary(HttpServletRequest request) {
+        //
+        if (getCoupleId(request) != getCoupleId(request)) {
+            return new ArrayList<>(FAIL);
+        }
+        //
         return service.getDiary(getCoupleId(request));
     }
 

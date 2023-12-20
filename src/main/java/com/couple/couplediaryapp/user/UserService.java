@@ -2,14 +2,18 @@ package com.couple.couplediaryapp.user;
 
 import com.couple.couplediaryapp.common.Const;
 import com.couple.couplediaryapp.common.ResVo;
+import com.couple.couplediaryapp.common.SessionConst;
 import com.couple.couplediaryapp.user.model.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.ArrayList;
+
+import static com.couple.couplediaryapp.common.Const.FAIL;
 
 @Slf4j
 @Service
@@ -47,13 +51,14 @@ public class UserService {
     }
 
     //
-    public UserSelProfileVo getProfile(UserSelProfileDto dto) {
+    public UserSelProfileVo getProfile(int userId) {
         //
-        return mapper.getProfile(dto);
+        return mapper.getProfile(userId);
     }
 
     ResVo updProfile(UserUpdProfileDto dto) {
         int result = mapper.updProfile(dto);
         return new ResVo(result);
     }
+    //
 }
