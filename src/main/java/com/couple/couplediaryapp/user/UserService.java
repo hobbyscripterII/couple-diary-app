@@ -47,7 +47,7 @@ public class UserService {
     }
 
     //
-    public List<UserSelProfileVo> getProfile(UserSelProfileDto dto) {
+    public UserSelProfileVo getProfile(UserSelProfileDto dto) {
         //
         return mapper.getProfile(dto);
     }
