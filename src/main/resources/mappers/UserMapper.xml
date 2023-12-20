@@ -31,8 +31,7 @@
         JOIN couple_user AS C
         ON A.gender = 'M' AND B.cwoman = C.cuser
         OR A.gender = 'W' AND B.cman = C.cuser
-        WHERE B.ccouple = #{coupleId}
-        AND A.cuser = #{userId}
+        WHERE A.cuser = #{userId}
     </select>
 
     <update id="updProfile">

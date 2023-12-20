@@ -1,7 +1,9 @@
 package com.couple.couplediaryapp.user;
 
+import com.couple.couplediaryapp.common.Const;
 import com.couple.couplediaryapp.common.ResVo;
 import com.couple.couplediaryapp.common.SessionConst;
+import com.couple.couplediaryapp.common.Utils;
 import com.couple.couplediaryapp.user.model.*;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.couple.couplediaryapp.common.Const.*;
 
 @Slf4j
 @RestController
@@ -54,11 +58,10 @@ public class UserController {
     @Operation(summary = "프로필 출력", description = "프로필 출력 기능")
     public UserSelProfileVo getProfile(HttpServletRequest request) {
         //
-        return service.getProfile(UserSelProfileDto
-                .builder()
-                .coupleId(getCoupleId(request))
-                .userId(getUserId(request))
-                .build());
+        if(getUserId(request) == 0 ){
+            return new UserSelProfileVo(); // 이건 낼 다시 해보기
+        }
+        return service.getProfile(getUserId(request));
     }
 
     @PatchMapping("/profile")
