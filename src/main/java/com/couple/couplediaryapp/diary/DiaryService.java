@@ -3,6 +3,7 @@ package com.couple.couplediaryapp.diary;
 import com.couple.couplediaryapp.common.Const;
 import com.couple.couplediaryapp.common.ResVo;
 import com.couple.couplediaryapp.common.SessionConst;
+import com.couple.couplediaryapp.common.Utils;
 import com.couple.couplediaryapp.diary.model.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -65,124 +66,6 @@ public class DiaryService {
         }
     }
 
-    // 주영
-    // 일기 수정
-    int updDiary(DiaryUpdDto dto) {
-        int result = Const.FAIL;
-
-        try {
-            int updDiaryRows = mapper.updDiary(dto); // 일기 수정
-            int updDiaryPicsRows = updDiaryItems(Const.PICS, dto); // 일기 사진 수정
-            int updDiaryHashPows = updDiaryItems(Const.HASH, dto); // 일기 해시태그 수정
-            result = Const.SUCCESS;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return result;
-        }
-        return result;
-    }
-
-    public int updDiaryItems(String itemName, DiaryUpdDto dto) {
-        List<Integer> getItemsId = itemName.equals(Const.PICS) ? getPicsId(dto.getDiaryId()) : getHashId(dto.getDiaryId());
-        int savedItemsCnt = getItemsId.size();
-        int updItemsCnt = itemName.equals(Const.PICS) ? dto.getDiaryPics().size() : dto.getHashContents().size();
-        int result = Const.FAIL;
-
-        try {
-            // 회원이 등록했던 아이템을 모두 삭제했을 때
-            if (savedItemsCnt != 0 && updItemsCnt == 0) {
-                return itemName.equals(Const.PICS) ? mapper.delDiaryPics(dto.getDiaryId()) : mapper.delDiaryHashs(dto.getDiaryId());
-            }
-            // 개수 변경없이 내용만 변경했을 때
-            if (savedItemsCnt == updItemsCnt) {
-                return result = itemName.equals(Const.PICS) ? updDiaryPic(dto, getItemsId) : updDiaryHash(dto, getItemsId);
-            }
-            // 등록한 아이템이 없었으나 사용자가 새로 추가했을 때
-            if (savedItemsCnt == 0 && updItemsCnt > 1) {
-                DiaryInsDto insDto = new DiaryInsDto();
-                insDto.setDiaryId(dto.getDiaryId());
-                insDto.setPics(dto.getDiaryPics());
-                insDto.setHashContents(dto.getHashContents());
-                if (itemName.equals(Const.PICS)) {
-                    return mapper.insDiaryPics(insDto);
-                } else {
-                    return mapper.insDiaryHash(insDto);
-                }
-            }
-            // 저장된 아이템 개수가 수정된 아이템 개수보다 많을 때
-            if (savedItemsCnt > updItemsCnt) {
-                for (int i = updItemsCnt; i < savedItemsCnt; i++) {
-                    if (itemName.equals(Const.PICS)) {
-                        mapper.delDiaryPic(getItemsId.get(i));
-                    } else {
-                        mapper.delDiaryHash(getItemsId.get(i));
-                    }
-                }
-                if (itemName.equals(Const.PICS)) {
-                    updDiaryPic(dto, getItemsId);
-                } else {
-                    updDiaryHash(dto, getItemsId);
-                }
-            }
-            // 저장된 아이템 개수가 수정된 아이템 개수보다 적을 때
-            if (savedItemsCnt < updItemsCnt) {
-                for (int i = savedItemsCnt; i < updItemsCnt; i++) {
-                    if (itemName.equals(Const.PICS)) {
-                        mapper.insDiaryPicPart(new DiaryPicsInsDto(dto.getDiaryId(), dto.getDiaryPics().get(i)));
-                    } else {
-                        mapper.insDiaryHashPart(new DiaryHashInsDto(dto.getDiaryId(), dto.getHashContents().get(i)));
-                    }
-                }
-                result = SUCCESS;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-    // 사진 개별 수정
-    public int updDiaryPic(DiaryUpdDto dto, List<Integer> getPicsId) {
-        int savedPicsCnt = getPicsId.size();
-        int updPicsCnt = dto.getDiaryPics().size();
-        int length = savedPicsCnt > updPicsCnt ? (savedPicsCnt - updPicsCnt) : savedPicsCnt;
-        int result = 0;
-
-        for (int i = 0; i < length; i++) {
-            dto.setPicsId(getPicsId.get(i));
-            dto.setPic(dto.getDiaryPics().get(i));
-            result += mapper.updDiaryPics(dto);
-        }
-        return length == result ? 1 : 0;
-    }
-
-    // 해시태그 개별 수정
-    public int updDiaryHash(DiaryUpdDto dto, List<Integer> getHashId) {
-        int savedHashCnt = getHashId.size();
-        int updHashCnt = dto.getDiaryPics().size();
-        int length = savedHashCnt > updHashCnt ? (savedHashCnt - updHashCnt) : savedHashCnt;
-        int result = 0;
-
-        for (int i = 0; i < length; i++) {
-            dto.setHashId(getHashId.get(i));
-            dto.setHash(dto.getHashContents().get(i));
-            result += mapper.updDiaryHash(dto);
-        }
-        return length == result ? 1 : 0;
-    }
-
-    // picsId 가져오기(couple_pics 테이블의 PK)
-    public List<Integer> getPicsId(int diaryId) {
-        List<Integer> getPicsId = mapper.getPicsId(diaryId);
-        return getPicsId;
-    }
-
-    // HashId 가져오기(couple_hash 테이블의 PK)
-    public List<Integer> getHashId(int diaryId) {
-        List<Integer> getHashId = mapper.getHashId(diaryId);
-        return getHashId;
-    }
-
     //승민
     ResVo delDiary(int diaryId) {
         try {
@@ -194,5 +77,107 @@ public class DiaryService {
             e.printStackTrace();
             return new ResVo(FAIL);
         }
+    }
+
+    // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+    // 주영(작업 진행 중)
+    public int updDiaryTest(DiaryUpdDto dto) throws Exception {
+        int result = FAIL;
+
+        try {
+            int updDiaryRows = mapper.updDiary(dto); // 1. diary 테이블 수정
+            int updDiaryPicsRows = updDiaryItems(dto, PICS); // 2. diary_pics 테이블 수정
+            int updDiaryHashRows = updDiaryItems(dto, HASH); // 3. diary_hash 테이블 수정
+            result = SUCCESS;
+        } catch (Exception e) {
+            throw new Exception();
+        }
+        return result;
+    }
+
+    public int updDiaryItems(DiaryUpdDto dto, String items) throws Exception {
+        int result = FAIL; // return 값
+
+        try {
+            // 해당 일기의 pics, hash PK를 담을 list
+            List<Integer> getItemsId = items.equals(PICS) ? getPicsId(dto.getDiaryId()) : getHashId(dto.getDiaryId());
+            // DB에 저장된 items의 개수
+            int savedItemsCnt = getItemsId.size();
+            // JSON에서 넘어온 items의 개수
+            int updItemsCnt = items.equals(PICS) ? dto.getDiaryPics().size() : dto.getHashContents().size();
+
+            // DB > JSON
+            if (savedItemsCnt > updItemsCnt) {
+                int length = (savedItemsCnt - updItemsCnt); // update 해야 할 length
+                int delDiaryItemsRows = delDiaryItemsPart(updItemsCnt, savedItemsCnt, items);
+                int updDiaryItemsRows = updDiaryItemsPart(dto, getItemsId, length, items);
+                // DB < JSON (진행 중)
+            } else {
+                int length = (updItemsCnt - savedItemsCnt);
+                int insDiaryItemsRows = insDiaryItemsPart(dto, getItemsId, length, items);
+                int updDiaryItemsRows = updDiaryItemsPart(dto, getItemsId, length, items);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+//            throw new Exception(); // 완료하고 주석 풀기
+        }
+        return result;
+    }
+
+    // 아이템 개별 등록
+    public int insDiaryItemsPart(DiaryUpdDto dto, List<Integer> getItemsId, int length, String items) {
+        Object obj = null;
+        DiaryPicsInsDto picsDto = new DiaryPicsInsDto();
+        DiaryHashInsDto hashDto = new DiaryHashInsDto();
+
+        if (items.equals(PICS)) {
+            picsDto.setDiaryId(dto.getDiaryId());
+            obj = picsDto;
+        } else {
+            hashDto.setDiaryId(dto.getDiaryId());
+            obj = hashDto;
+        }
+
+        log.info("obj = {}", obj);
+
+//        for (int i = 0; i < length; i++) {
+//            dto.setPicsId(getItemsId.get(i));
+//            dto.setPic(dto.getDiaryPics().get(i));
+//
+//            dto.setHashId(getItemsId.get(i));
+//            dto.setHash(dto.getHashContents().get(i));
+//        }
+
+//        return items.equals(PICS) ? mapper.insDiaryPics(dto) : mapper.insDiaryHash(dto);
+        return FAIL;
+    }
+
+    // 아이템 개별 업로드
+    public int updDiaryItemsPart(DiaryUpdDto dto, List<Integer> getItemsId, int length, String items) {
+        for (int i = 0; i < length; i++) {
+            dto.setPicsId(getItemsId.get(i));
+            dto.setPic(dto.getDiaryPics().get(i));
+
+            dto.setHashId(getItemsId.get(i));
+            dto.setHash(dto.getHashContents().get(i));
+        }
+        return items.equals(PICS) ? mapper.updDiaryPics(dto) : mapper.updDiaryHash(dto);
+    }
+
+    // 아이템 개별 삭제
+    public int delDiaryItemsPart(int min, int max, String items) {
+        int delDiaryItemsRows = 0;
+        for (int i = min; i < max; i++) {
+            delDiaryItemsRows = items.equals(PICS) ? mapper.delDiaryPic(i) : mapper.delDiaryHash(i);
+        }
+        return delDiaryItemsRows >= SUCCESS ? SUCCESS : FAIL;
+    }
+
+    public List<Integer> getPicsId(int diaryId) {
+        return mapper.getPicsId(diaryId);
+    }
+
+    public List<Integer> getHashId(int diaryId) {
+        return mapper.getHashId(diaryId);
     }
 }
