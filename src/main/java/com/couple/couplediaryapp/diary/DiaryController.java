@@ -2,6 +2,7 @@ package com.couple.couplediaryapp.diary;
 
 import com.couple.couplediaryapp.common.ResVo;
 import com.couple.couplediaryapp.common.SessionConst;
+import com.couple.couplediaryapp.common.Utils;
 import com.couple.couplediaryapp.diary.model.DiaryInsDto;
 import com.couple.couplediaryapp.diary.model.DiarySelVo;
 import com.couple.couplediaryapp.diary.model.DiaryUpdDto;
@@ -26,7 +27,7 @@ public class DiaryController {
         return Integer.valueOf(String.valueOf(session.getAttribute(SessionConst.COUPLE_ID)));
     }
 
-    public Integer getUserId (HttpServletRequest request) {
+    public Integer getUserId(HttpServletRequest request) {
         HttpSession session = request.getSession();
         return (Integer) session.getAttribute(SessionConst.USER_ID);
     }
@@ -62,9 +63,24 @@ public class DiaryController {
     // 일기 수정
     @Operation(summary = "일기 수정", description = "일기 수정")
     @PatchMapping
-    int updDiary(@RequestBody DiaryUpdDto dto, HttpServletRequest request) {
-        dto.setCoupleId(getCoupleId(request));
-        return service.updDiary(dto);
+    int updDiary(@RequestBody DiaryUpdDto dto, HttpServletRequest request) throws Exception {
+        // 커플 id(pk)를 얻어온다.
+        int coupleId = getCoupleId(request);
+        try {
+            // dto 값이 null이 아니거나 커플 id가 0이 아닐 경우 아래 문장을 실행한다.
+            if (Utils.isNotNull(dto) || Utils.isNotNull(coupleId)) {
+                // dto에 커플 id를 넣는다.
+                dto.setCoupleId(coupleId);
+                // 일기 수정 메소드를 호출한다.
+                return service.updDiaryTest(dto);
+            } else {
+                // null 혹은 0이 발견될 경우 예외를 던진다.
+                throw new NullPointerException();
+            }
+        } catch (Exception e) {
+            // 예외 발생시 예외를 던진다.
+            throw new Exception();
+        }
     }
 
     // 일기 삭제

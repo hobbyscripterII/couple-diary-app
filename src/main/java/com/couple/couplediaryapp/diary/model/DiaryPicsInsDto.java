@@ -1,10 +1,12 @@
 package com.couple.couplediaryapp.diary.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Getter
-@AllArgsConstructor
+@Setter
+@ToString
 public class DiaryPicsInsDto {
     private int diaryId;
     private String pic;
