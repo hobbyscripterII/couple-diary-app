@@ -37,7 +37,7 @@ public class DiaryController {
     // 일기 등록
     @PostMapping
     @Operation(summary = "일기 등록", description = "일기 등록")
-    public ResVo insDiary(@RequestBody DiaryInsDto dto, HttpServletRequest request) {
+    public ResVo insDiary(@RequestBody DiaryInsDto dto, HttpServletRequest request) throws Exception {
         dto.setCuser(getUserId(request));
         dto.setCcouple(getCoupleId(request));
         return service.insDiary(dto);

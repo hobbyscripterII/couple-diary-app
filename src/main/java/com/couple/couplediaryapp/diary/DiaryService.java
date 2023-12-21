@@ -27,12 +27,17 @@ public class DiaryService {
         DiarySelVo list = mapper.selDiary(diaryId);
         try {
             if (list != null) {
+                // 불러온 다이어리 목록이 null이 아닐 경우 아래의 문장을 실행한다.
                 List<String> hashContents = mapper.selHashDiary(diaryId);
                 list.setHashContents(hashContents);
                 List<String> pics = mapper.selPicDiary(diaryId);
                 list.setPics(pics);
+            } else {
+                // 불러올 다이어리 목록이 없을 경우 NullPointException을 던진다.
+                throw new NullPointerException();
             }
         } catch (Exception e) {
+            // 예외 발생 시 예외를 던진다.
             e.printStackTrace();
             return null;
         }
@@ -53,16 +58,22 @@ public class DiaryService {
         return list;
     }
 
-    // 일기 등록
-    public ResVo insDiary(DiaryInsDto dto) {
+    //일기 등록
+    public ResVo insDiary(DiaryInsDto dto) throws Exception {
         try {
-            mapper.insDairy(dto);
-            mapper.insDiaryPics(dto);
-            mapper.insDiaryHash(dto);
-            return new ResVo(SUCCESS);
+            int insDiaryRows = mapper.insDairy(dto);
+            int insDiaryHashRows = mapper.insDiaryHash(dto);
+            int insDiaryPicsRows = mapper.insDiaryPics(dto);
+            // 다이어리 삽입, 해시태그 개수 동일, 사진 개수 동일 시 아래 문장을 실행하여 1을 출력한다.
+            if (Utils.isNotNull(insDiaryRows) || insDiaryHashRows == dto.getHashContents().size() || insDiaryPicsRows == dto.getPics().size()) {
+                return new ResVo(SUCCESS);
+            } else {
+                // 불러올 다이어리 목록이 없을 경우 NullPointException을 던진다.
+                throw new NullPointerException();
+            }
         } catch (Exception e) {
-            e.printStackTrace();
-            return new ResVo(FAIL);
+            // 예외 발생 시 예외를 던진다.
+            throw new Exception();
         }
     }
 
