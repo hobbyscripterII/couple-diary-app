@@ -33,7 +33,7 @@ public interface DiaryMapper {
     List<Integer> getPicsId(int diaryId); // picsId 가져오기(couple_pics PK)
     List<Integer> getHashId(int diaryId); // hashId 가져오기(couple_hash PK)
 
-    //승민
+    // 일기 삭제
     int delDiaryPics(int diaryId);
     int delDiaryHashs(int diaryId);
     int delDiary(int diaryId);
