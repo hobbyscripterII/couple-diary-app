@@ -8,7 +8,7 @@ import java.util.*;
 @Mapper
 public interface DiaryMapper {
     //일기 등록
-    int insDairy(DiaryInsDto dto);// 일기 내용 등록
+    int insDiary(DiaryInsDto dto);// 일기 내용 등록
     int insDiaryPics(DiaryInsDto dto);// 일기 사진 등록
     int insDiaryHash(DiaryInsDto dto);// 일기 해시태그 등록
 
@@ -33,7 +33,7 @@ public interface DiaryMapper {
     List<Integer> getPicsId(int diaryId); // picsId 가져오기(couple_pics PK)
     List<Integer> getHashId(int diaryId); // hashId 가져오기(couple_hash PK)
 
-    //승민
+    // 일기 삭제
     int delDiaryPics(int diaryId);
     int delDiaryHashs(int diaryId);
     int delDiary(int diaryId);

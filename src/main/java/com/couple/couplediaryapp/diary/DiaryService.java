@@ -1,17 +1,12 @@
 package com.couple.couplediaryapp.diary;
 
-import com.couple.couplediaryapp.common.Const;
 import com.couple.couplediaryapp.common.ResVo;
-import com.couple.couplediaryapp.common.SessionConst;
 import com.couple.couplediaryapp.common.Utils;
 import com.couple.couplediaryapp.diary.model.*;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.couple.couplediaryapp.common.Const.*;
@@ -61,7 +56,7 @@ public class DiaryService {
     //일기 등록
     public ResVo insDiary(DiaryInsDto dto) throws Exception {
         try {
-            int insDiaryRows = mapper.insDairy(dto);
+            int insDiaryRows = mapper.insDiary(dto);
             int insDiaryHashRows = mapper.insDiaryHash(dto);
             int insDiaryPicsRows = mapper.insDiaryPics(dto);
             // 다이어리 삽입, 해시태그 개수 동일, 사진 개수 동일 시 아래 문장을 실행하여 1을 출력한다.
