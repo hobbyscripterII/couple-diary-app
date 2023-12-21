@@ -8,7 +8,7 @@ import java.util.*;
 @Mapper
 public interface DiaryMapper {
     //일기 등록
-    int insDairy(DiaryInsDto dto);// 일기 내용 등록
+    int insDiary(DiaryInsDto dto);// 일기 내용 등록
     int insDiaryPics(DiaryInsDto dto);// 일기 사진 등록
     int insDiaryHash(DiaryInsDto dto);// 일기 해시태그 등록
 

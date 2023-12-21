@@ -47,7 +47,7 @@
     <!-- -->
 
     <!-- 일기 등록 (내용, 사진, 해시태그 insert) -->
-    <insert id="insDairy" keyProperty="diaryId" useGeneratedKeys="true">
+    <insert id="insDiary" keyProperty="diaryId" useGeneratedKeys="true">
         INSERT INTO couple_diary
         SET ccouple = #{ccouple}
         , cuser = #{cuser}
