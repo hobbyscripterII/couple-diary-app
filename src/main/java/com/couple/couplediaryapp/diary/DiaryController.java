@@ -84,7 +84,7 @@ public class DiaryController {
                 // dto에 커플 id를 넣는다.
                 dto.setCoupleId(coupleId);
                 // 일기 수정 메소드를 호출한다.
-                return service.updDiaryTest(dto);
+                return service.updDiary(dto);
             } else {
                 // null 혹은 0이 발견될 경우 예외를 던진다.
                 throw new NullPointerException();
