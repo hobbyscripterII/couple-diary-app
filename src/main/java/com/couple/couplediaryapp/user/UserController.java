@@ -64,12 +64,22 @@ public class UserController {
     //
     @GetMapping("/profile")
     @Operation(summary = "프로필 출력", description = "프로필 출력")
-    public UserSelProfileVo getProfile(HttpServletRequest request) {
+    public UserSelProfileVo getProfile(HttpServletRequest request) throws Exception {
         //
-        if (getUserId(request) == 0) {
-            return new UserSelProfileVo(); // 이건 낼 다시 해보기
+        // 내가 누구랑 커플인지를 로그인한 유저가 누구인지를 알기위해 P.K를 얻어옵니다.
+        int userId = getUserId(request);
+        try {
+            if( Utils.isNotNull(userId) ){
+                //
+                return service.getProfile(userId);
+            }
+            else {
+                throw new NullPointerException();
+            }
+        } catch (Exception e){
+            //
+            throw new Exception();
         }
-        return service.getProfile(getUserId(request));
     }
 
     @PatchMapping("/profile")

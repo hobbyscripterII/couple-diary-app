@@ -10,12 +10,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
 import static com.couple.couplediaryapp.common.Const.FAIL;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/diary")
 @RequiredArgsConstructor
@@ -51,13 +53,23 @@ public class DiaryController {
     // 일기 목록
     @GetMapping
     @Operation(summary = "일기 목록", description = "일기 목록 출력")
-    public List<DiarySelVo> getDiary(HttpServletRequest request) {
+    public List<DiarySelVo> getDiary(HttpServletRequest request) throws Exception {
         //
-        if (getCoupleId(request) != getCoupleId(request)) {
-            return new ArrayList<>(FAIL);
+        int coupleId = getCoupleId(request);
+        // 로그인 했을 때 그 유저가 어디 커플인지를 알기위해 P.K를 얻어옵니다.
+        try {
+            if( Utils.isNotNull(coupleId) ){
+                // 들어오는 커플
+                return service.getDiary(coupleId);
+            } else {
+                // null 혹은 0이 발견될 경우 예외를 던진다.
+                throw new NullPointerException();
+            }
+        }catch (Exception e){
+            // 예외 발생 시 예외를 던진다.
+            throw new Exception();
         }
         //
-        return service.getDiary(getCoupleId(request));
     }
 
     // 일기 수정
