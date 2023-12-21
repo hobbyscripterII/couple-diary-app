@@ -37,28 +37,21 @@ public class UserController {
     @Operation(summary = "로그인", description = "로그인")
     @PostMapping
     public UserEntity signIn(@RequestBody UserSignInDto dto, HttpServletRequest request) throws Exception {
-        UserEntity entity = null; // 얕은 복사용 객체 생성
-
         try {
-            UserEntity entity_ = service.signIn(dto); // 회원가입 서비스 호출
-            // entity_가 null이 아닐 경우 if문을 실행한다.
-            if (Utils.isNotNull(entity_)) {
+            UserEntity entity = service.signIn(dto); // 회원가입 서비스 호출
+            // entity가 null이 아닐 경우 if문을 실행한다.
+            if (Utils.isNotNull(entity)) {
                 // session에 회원 id와 커플 id를 저장한다.
                 HttpSession session = request.getSession();
-                session.setAttribute(SessionConst.USER_ID, entity_.getUserId());
-                session.setAttribute(SessionConst.COUPLE_ID, entity_.getCoupleId());
-                // try - catch문 밖에있는 entity에 값을 대입한다.(얕은 복사)
-                entity = entity_;
+                session.setAttribute(SessionConst.USER_ID, entity.getUserId());
+                session.setAttribute(SessionConst.COUPLE_ID, entity.getCoupleId());
+                return entity;
             } else {
-                // entity_가 null이면 예외를 던진다.
-                throw new NullPointerException();
+                throw new NullPointerException(); // entity가 null이면 예외를 던진다.
             }
         } catch (Exception e) {
-            // 예외 발생시에도 예외를 던진다.
-            throw new Exception();
+            throw new Exception(); // 예외 발생시에도 예외를 던진다.
         }
-        // entity_가 null이 아닐 경우에만 entity에 값을 담아 return한다.
-        return entity;
     }
 
     //
@@ -69,14 +62,13 @@ public class UserController {
         // 내가 누구랑 커플인지를 로그인한 유저가 누구인지를 알기위해 P.K를 얻어옵니다.
         int userId = getUserId(request);
         try {
-            if( Utils.isNotNull(userId) ){
+            if (Utils.isNotNull(userId)) {
                 //
                 return service.getProfile(userId);
-            }
-            else {
+            } else {
                 throw new NullPointerException();
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             //
             throw new Exception();
         }
