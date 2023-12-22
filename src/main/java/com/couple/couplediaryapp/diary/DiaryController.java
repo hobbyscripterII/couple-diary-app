@@ -46,7 +46,7 @@ public class DiaryController {
     // 일기 읽기
     @GetMapping("/{diaryId}")
     @Operation(summary = "일기 읽기", description = "일기 읽기")
-    DiarySelVo selDiary(@PathVariable int diaryId) {
+    DiarySelVo selDiary(@PathVariable int diaryId) throws Exception {
         return service.selDiary(diaryId);
     }
 
@@ -75,7 +75,7 @@ public class DiaryController {
     // 일기 수정
     @Operation(summary = "일기 수정", description = "일기 수정")
     @PatchMapping
-    int updDiary(@RequestBody DiaryUpdDto dto, HttpServletRequest request) throws Exception {
+    ResVo updDiary(@RequestBody DiaryUpdDto dto, HttpServletRequest request) throws Exception {
         // 커플 id(pk)를 얻어온다.
         int coupleId = getCoupleId(request);
         try {
@@ -84,7 +84,7 @@ public class DiaryController {
                 // dto에 커플 id를 넣는다.
                 dto.setCoupleId(coupleId);
                 // 일기 수정 메소드를 호출한다.
-                return service.updDiary(dto);
+                return new ResVo(service.updDiary(dto));
             } else {
                 // null 혹은 0이 발견될 경우 예외를 던진다.
                 throw new NullPointerException();
@@ -98,7 +98,7 @@ public class DiaryController {
     // 일기 삭제
     @DeleteMapping("/{diaryId}")
     @Operation(summary = "일기 삭제", description = "일기 삭제")
-    ResVo delDiary(@PathVariable int diaryId) {
+    ResVo delDiary(@PathVariable int diaryId) throws Exception {
         return service.delDiary(diaryId);
     }
 }
