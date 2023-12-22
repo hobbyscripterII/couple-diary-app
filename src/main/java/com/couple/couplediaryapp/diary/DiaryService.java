@@ -40,15 +40,19 @@ public class DiaryService {
 
     // 일기 목록
     public List<DiarySelVo> getDiary(int coupleId) {
-        //
+        // controller에서 커플의 P.K를 받은 후 list의 주소값에 넣어줍니다.
         List<DiarySelVo> list = mapper.getDiary(coupleId);
+        // foreach는 이 때 list size는 등록된 일기의 목록만큼 저장됩니다.
         for (DiarySelVo vo : list) {
+            // pics, hashs - 조회된 일기의 P.K 값으로 일기의 pics와 hashContents를 조회합니다.
             List<String> pics = mapper.getDiaryPics(vo.getDiaryId());
-            List<String> hashs = mapper.getDiaryHash(vo.getDiaryId());
+            List<String> hashContents = mapper.getDiaryHash(vo.getDiaryId());
+            // vo.setPics, vo.setHashContents - 조회된 정보들을 담아줍니다
             vo.setPics(pics);
-            vo.setHashContents(hashs);
+            vo.setHashContents(hashContents);
             //
         }
+        // return 해줄 때의 list. 조회된 일기정보, 사진과 해시태그의 정보를 담아서 리턴해준다.
         return list;
     }
 

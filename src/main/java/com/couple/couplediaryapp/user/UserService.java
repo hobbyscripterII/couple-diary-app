@@ -52,7 +52,7 @@ public class UserService {
 
     //
     public UserSelProfileVo getProfile(int userId) {
-        //
+        // controller에서 리턴받은 값을 받은 후 mapper에 전달합니다.
         return mapper.getProfile(userId);
     }
 

@@ -63,13 +63,14 @@ public class UserController {
         int userId = getUserId(request);
         try {
             if (Utils.isNotNull(userId)) {
-                //
+                // 로그인하는 유저의 P.K가 null이 아닐 때 service에 유저의 P.K값을 리턴해줍니다.
                 return service.getProfile(userId);
             } else {
+                // 만약 유저의 P.K가 null일 경우 예외 던집니다.
                 throw new NullPointerException();
             }
         } catch (Exception e) {
-            //
+            // 성공할 때 제대로 리턴됐는지 확인하기 위해
             throw new Exception();
         }
     }
