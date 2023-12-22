@@ -59,14 +59,14 @@ public class DiaryController {
         // 로그인 했을 때 그 유저가 어디 커플인지를 알기위해 P.K를 얻어옵니다.
         try {
             if( Utils.isNotNull(coupleId) ){
-                // 들어오는 커플
+                // controller에서 리턴받은 값을 받은 후 mapper에 전달합니다.
                 return service.getDiary(coupleId);
             } else {
-                // null 혹은 0이 발견될 경우 예외를 던진다.
+                // null 혹은 0이 발견될 경우 예외를 던집니다.
                 throw new NullPointerException();
             }
         }catch (Exception e){
-            // 예외 발생 시 예외를 던진다.
+            // 예외 발생 시 예외를 던집니다.
             throw new Exception();
         }
         //
