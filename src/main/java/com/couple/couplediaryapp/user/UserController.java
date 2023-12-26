@@ -1,5 +1,6 @@
 package com.couple.couplediaryapp.user;
 
+import com.couple.couplediaryapp.common.Const;
 import com.couple.couplediaryapp.common.ResVo;
 import com.couple.couplediaryapp.common.SessionConst;
 import com.couple.couplediaryapp.common.Utils;
@@ -10,6 +11,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import static com.couple.couplediaryapp.common.Const.SUCCESS;
 
 @Slf4j
 @RestController
@@ -37,20 +40,20 @@ public class UserController {
     @Operation(summary = "로그인", description = "로그인")
     @PostMapping
     public UserEntity signIn(@RequestBody UserSignInDto dto, HttpServletRequest request) throws Exception {
+        log.info("dto = {}", dto);
         try {
-            UserEntity entity = service.signIn(dto); // 회원가입 서비스 호출
-            // entity가 null이 아닐 경우 if문을 실행한다.
-            if (Utils.isNotNull(entity)) {
-                // session에 회원 id와 커플 id를 저장한다.
+            UserEntity entity = service.signIn(dto);
+            if (entity.getResult() == SUCCESS) {
                 HttpSession session = request.getSession();
                 session.setAttribute(SessionConst.USER_ID, entity.getUserId());
                 session.setAttribute(SessionConst.COUPLE_ID, entity.getCoupleId());
                 return entity;
             } else {
-                throw new NullPointerException(); // entity가 null이면 예외를 던진다.
+                throw new Exception();
             }
         } catch (Exception e) {
-            throw new Exception(); // 예외 발생시에도 예외를 던진다.
+            throw new Exception();
+
         }
     }
 
