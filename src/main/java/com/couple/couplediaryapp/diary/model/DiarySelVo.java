@@ -21,6 +21,8 @@ public class DiarySelVo {
     private int emoji;
     @Schema(title = "일기를 작성한 시간")
     private String createdAt;
+    @Schema(title = "커플의 사귄 날짜")
+    private String startedAt;
     //
     @Schema(title = "작성한 일기의 사진 정보")
     List<String> pics;
