@@ -1,19 +1,14 @@
 package com.couple.couplediaryapp.user;
 
-import com.couple.couplediaryapp.common.Const;
 import com.couple.couplediaryapp.common.ResVo;
-import com.couple.couplediaryapp.common.SessionConst;
 import com.couple.couplediaryapp.user.model.*;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-
 import static com.couple.couplediaryapp.common.Const.FAIL;
+import static com.couple.couplediaryapp.common.Const.SUCCESS;
 
 @Slf4j
 @Service
@@ -22,32 +17,30 @@ public class UserService {
     private final UserMapper mapper;
 
     public int signUp(UserSignUpDto dto) {
-        int result = Const.FAIL;
-        dto.setUpw(BCrypt.hashpw(dto.getUpw(), BCrypt.gensalt()));
-
         try {
+            dto.setUpw(BCrypt.hashpw(dto.getUpw(), BCrypt.gensalt()));
             return mapper.signUp(dto);
         } catch (Exception e) {
-            e.printStackTrace();
-            return result;
+            return FAIL;
         }
     }
 
     public UserEntity signIn(UserSignInDto dto) {
-        UserEntity userEntity = new UserEntity();
-        userEntity.setResult(Const.FAIL);
-
+        UserEntity entity = new UserEntity();
         try {
-            userEntity = mapper.getUser(dto.getUid());
-            if (userEntity == null) {
-                return userEntity;
-            } else if (BCrypt.checkpw(dto.getUpw(), userEntity.getUpw())) {
-                userEntity.setResult(Const.SUCCESS);
+            UserEntity entity_ = mapper.getUser(dto.getUid());
+            log.info("entity_ = {}", entity_);
+            if (entity_ == null) {
+                entity.setResult(FAIL);
+            } else if (BCrypt.checkpw(dto.getUpw(), entity_.getUpw())) {
+                entity_.setResult(SUCCESS);
+                entity = entity_;
             }
+            return entity;
         } catch (Exception e) {
-            e.printStackTrace();
+            entity.setResult(FAIL);
+            return entity;
         }
-        return userEntity;
     }
 
     //
