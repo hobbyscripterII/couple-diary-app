@@ -26,7 +26,7 @@ public class DiaryService {
                 List<String> hashContents = mapper.selHashDiary(diaryId);
                 list.setHashContents(hashContents);
                 List<String> diaryPics = mapper.selPicDiary(diaryId);
-                list.setDiaryPics(diaryPics);
+                list.setPics(diaryPics);
                 return list;
             } else {
                 // 불러올 다이어리 목록이 없을 경우 NullPointException을 던진다.
@@ -48,7 +48,7 @@ public class DiaryService {
             List<String> diaryPics = mapper.getDiaryPics(vo.getDiaryId());
             List<String> hashContents = mapper.getDiaryHash(vo.getDiaryId());
             // vo.setPics, vo.setHashContents - 조회된 정보들을 담아줍니다
-            vo.setDiaryPics(diaryPics);
+            vo.setPics(diaryPics);
             vo.setHashContents(hashContents);
             //
         }
