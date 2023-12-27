@@ -3,7 +3,7 @@
 <mapper namespace="com.couple.couplediaryapp.diary.DiaryMapper">
     <!-- 일기 목록 조회 -->
     <select id="getDiary">
-        SELECT B.cdiary AS diaryId, A.pic AS profilePic, B.title, B.`contents`,
+        SELECT B.cdiary AS diaryId, A.pic, B.title, B.`contents`,
                B.emoji, B.created_at AS createdAt, A.started_at AS startedAt
         FROM couple_user AS A
         JOIN couple_diary AS B

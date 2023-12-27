@@ -12,7 +12,7 @@ public class DiarySelVo {
     @Schema(title = "일기 아이디")
     private int diaryId;
     @Schema(title = "작성자의 프로필 정보")
-    private String profilePic;
+    private String pic;
     @Schema(title = "작성한 일기의 제목")
     private String title;
     @Schema(title = "작성한 일기의 내용")
@@ -25,7 +25,7 @@ public class DiarySelVo {
     private String startedAt;
     //
     @Schema(title = "작성한 일기의 사진 정보")
-    List<String> diaryPics;
+    List<String> pics;
     @Schema(title = "작성한 일기의 해시태그")
     List<String> hashContents;
 }
