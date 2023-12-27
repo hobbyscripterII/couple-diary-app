@@ -11,7 +11,7 @@ public class DiarySelVo {
     //
     @Schema(title = "일기 아이디")
     private int diaryId;
-    @Schema(title = "작성자의 프로필 정보")
+    @Schema(title = "작성자 프로필 정보")
     private String pic;
     @Schema(title = "작성한 일기의 제목")
     private String title;
