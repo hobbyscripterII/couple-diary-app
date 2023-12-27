@@ -25,8 +25,8 @@ public class DiaryService {
                 // 불러온 다이어리 목록이 null이 아닐 경우 아래의 문장을 실행한다.
                 List<String> hashContents = mapper.selHashDiary(diaryId);
                 list.setHashContents(hashContents);
-                List<String> pics = mapper.selPicDiary(diaryId);
-                list.setPics(pics);
+                List<String> diaryPics = mapper.selPicDiary(diaryId);
+                list.setDiaryPics(diaryPics);
                 return list;
             } else {
                 // 불러올 다이어리 목록이 없을 경우 NullPointException을 던진다.
@@ -45,10 +45,10 @@ public class DiaryService {
         // foreach는 이 때 list size는 등록된 일기의 목록만큼 저장됩니다.
         for (DiarySelVo vo : list) {
             // pics, hashs - 조회된 일기의 P.K 값으로 일기의 pics와 hashContents를 조회합니다.
-            List<String> pics = mapper.getDiaryPics(vo.getDiaryId());
+            List<String> diaryPics = mapper.getDiaryPics(vo.getDiaryId());
             List<String> hashContents = mapper.getDiaryHash(vo.getDiaryId());
             // vo.setPics, vo.setHashContents - 조회된 정보들을 담아줍니다
-            vo.setPics(pics);
+            vo.setDiaryPics(diaryPics);
             vo.setHashContents(hashContents);
             //
         }
