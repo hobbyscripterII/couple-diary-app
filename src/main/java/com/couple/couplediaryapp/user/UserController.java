@@ -1,6 +1,5 @@
 package com.couple.couplediaryapp.user;
 
-import com.couple.couplediaryapp.common.Const;
 import com.couple.couplediaryapp.common.ResVo;
 import com.couple.couplediaryapp.common.SessionConst;
 import com.couple.couplediaryapp.common.Utils;
@@ -21,16 +20,6 @@ import static com.couple.couplediaryapp.common.Const.SUCCESS;
 public class UserController {
     private final UserService service;
 
-    public Integer getUserId(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        return Integer.valueOf(String.valueOf(session.getAttribute(SessionConst.USER_ID)));
-    }
-
-    public Integer getCoupleId(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        return Integer.valueOf(String.valueOf(session.getAttribute(SessionConst.COUPLE_ID)));
-    }
-
     @PostMapping("sign-up")
     @Operation(summary = "회원가입", description = "회원가입")
     public ResVo signUp(@RequestBody UserSignUpDto dto) {
@@ -39,7 +28,7 @@ public class UserController {
 
     @Operation(summary = "로그인", description = "로그인")
     @PostMapping
-    public UserEntity signIn(@RequestBody UserSignInDto dto, HttpServletRequest request) throws Exception {
+    public UserEntity login(@RequestBody UserSignInDto dto, HttpServletRequest request) throws Exception {
         log.info("dto = {}", dto);
         try {
             UserEntity entity = service.signIn(dto);
@@ -53,15 +42,24 @@ public class UserController {
             }
         } catch (Exception e) {
             throw new Exception();
-
         }
     }
 
-    //
+    @Operation(summary = "로그아웃", description = "로그아웃")
+    @GetMapping("/logout")
+    public ResVo logout(HttpServletRequest request) throws Exception {
+        try {
+            HttpSession session = request.getSession();
+            session.invalidate();
+            return new ResVo(SUCCESS);
+        } catch (Exception e) {
+            throw new Exception();
+        }
+    }
+
     @GetMapping("/profile")
     @Operation(summary = "프로필 출력", description = "프로필 출력")
     public UserSelProfileVo getProfile(HttpServletRequest request) throws Exception {
-        //
         // 내가 누구랑 커플인지를 로그인한 유저가 누구인지를 알기위해 P.K를 얻어옵니다.
         int userId = getUserId(request);
         try {
@@ -84,6 +82,16 @@ public class UserController {
         int userId = getUserId(request);
         dto.setUserId(userId);
         return service.updProfile(dto);
+    }
+
+    public Integer getUserId(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return Integer.valueOf(String.valueOf(session.getAttribute(SessionConst.USER_ID)));
+    }
+
+    public Integer getCoupleId(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        return Integer.valueOf(String.valueOf(session.getAttribute(SessionConst.COUPLE_ID)));
     }
 }
 

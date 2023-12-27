@@ -103,23 +103,31 @@ public class DiaryService {
     // 일기 사진/해시태그 수정
     public int updDiaryItems(DiaryUpdDto dto, String items) throws Exception {
         try {
+            // 인자값(PICS 혹은 HASH)으로 아이템을 구분하고 삼항식으로 해당 아이템에 맞게 세팅한다.
             List<Integer> idList = items.equals(PICS) ? getPicsId(dto.getDiaryId()) : getHashId(dto.getDiaryId());
+            // JSON에서 받아온 아이템의 개수
             int jsonCnt = items.equals(PICS) ? dto.getDiaryPics().size() : dto.getHashContents().size();
+            // DB에 저장된 아이템의 개수
             int dbCnt = idList.size();
 
             if (dbCnt == jsonCnt) { // DB == JSON
+                // DB에서 받아온 아이템과 JSON에서 받아온 아이템의 개수가 일치할 경우 전체 UPDATE를 실시한다.
                 updDiaryItemsPart(dto, idList, jsonCnt, items);
             } else if (dbCnt > jsonCnt) { // DB > JSON
-                if (jsonCnt == 0) { // 저장된 모든 사진 삭제
+                if (jsonCnt == 0) {
+                    // DB에 저장된 아이템이 있으나 수정된 아이템의 개수가 0일 때 모든 데이터를 삭제한다.
                     delDiaryItems(dto.getDiaryId(), items);
                 } else {
+                    // 단순히 DB에 저장된 아이템이 클 경우 더미 아이템을 삭제하고 첫번째 아이템부터 업데이트시킨다.
                     delDiaryItemsPart(jsonCnt, dbCnt, idList, items);
                     updDiaryItemsPart(dto, idList, jsonCnt, items);
                 }
             } else { // DB < JSON
-                if (dbCnt == 0) { // 사진 등록
+                if (dbCnt == 0) {
+                    // DB에 저장된 아이템의 개수가 0이며 JSON에서 넘어온 아이템의 개수가 0보다 클 때 INSERT를 실행한다.
                     insDiaryItemsPart(0, dto, items);
                 } else {
+                    // DB에 저장된 아이템보다 JSON에서 넘어온 아이템의 개수가 더 클 경우 그 개수만큼 INSERT를 먼저 실행하고 이전의 아이템을 UPDATE 시킨다.
                     insDiaryItemsPart(dbCnt, dto, items);
                     updDiaryItemsPart(dto, idList, dbCnt, items);
                 }
